@@ -16,39 +16,40 @@ sudo apt update && sudo apt upgrade -y
 
 sudo apt install -y curl wget git
 
-```
-```
 ### 2. Install Docker
+```
+
 sudo apt install -y docker.io
 sudo systemctl start docker
 sudo systemctl enable docker
 
 ```
-
-```
 ### Add user to Docker group (IMPORTANT)
+```
+
 sudo usermod -aG docker $USER
 newgrp docker
 
 ```
-
-```
 ### 3. Install Docker Compose
+```
+
 sudo apt install -y docker-compose
 ```
-```
 ### 4. Create Project Structure
+```
+
 mkdir monitoring-stack
 cd monitoring-stack
 
 mkdir prometheus alertmanager grafana
 ```
-
 ### 5. Prometheus Setup
-📄 prometheus.yml
+
 ```
 nano prometheus/prometheus.yml
 ```
+
 
 ```
 global:
@@ -74,7 +75,7 @@ scrape_configs:
 ## alert.rules.yml
 ```
 nano prometheus/alert.rules.yml
-
+```
 ```
 groups:
   - name: node-alerts
@@ -96,8 +97,9 @@ groups:
         annotations:
           summary: "Node is down"
 ```
-Alertmanager Setup
-```
+
+### Alertmanager Setup
+
 
 ```
 global:
