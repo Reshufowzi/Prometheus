@@ -1,0 +1,215 @@
+What is Monitoring?
+Monitoring = checking if your system is OK or NOT
+It answers questions like:
+❓ Is my server up or down?
+❓ Is CPU or memory too high?
+❓ Is my app responding slowly?
+❓ Did something break?
+In Prometheus terms:
+Prometheus collects metrics like:
+CPU usage
+Memory usage
+Disk space
+HTTP request count
+Error rate
+👉 Example:
+CPU usage > 80% for 5 minutes → ALERT 🚨
+Simple definition:
+Monitoring tells you WHEN something is wrong
+
+🧠 What is Observability?
+Observability = understanding WHY something is wrong
+It goes deeper than monitoring.
+It answers:
+❓ Why is my app slow?
+❓ Which service is causing the issue?
+❓ Is it DB, network, or code?
+❓ Which API is failing and for which user?
+Observability is based on 3 pillars:
+Metrics – numbers (Prometheus)
+Logs – detailed text (ELK / Loki)
+Traces – request flow (Jaeger / Tempo)
+Simple definition:
+Observability tells you WHY and WHERE the problem happened
+
+🛠️ Role of Prometheus & Grafana
+🟢 Prometheus (Monitoring + part of Observability)
+Collects metrics from apps, nodes, Kubernetes
+Stores time-series data
+Evaluates alert rules
+Example metrics:
+http_requests_total
+node_cpu_seconds_total
+container_memory_usage_bytes
+👉 Prometheus is mainly Monitoring, but also contributes to Observability (metrics part)
+
+📊 Grafana (Visualization & Observability UI)
+Shows data as dashboards
+Connects to:
+Prometheus (metrics)
+Loki (logs)
+Tempo / Jaeger (traces)
+Grafana helps you:
+Visualize trends
+Correlate metrics + logs + traces
+Debug issues faster
+👉 Grafana = Observability dashboard
+
+⚖️ Monitoring vs Observability (Easy Table)
+Feature
+Monitoring
+Observability
+Purpose
+Detect problems
+Understand problems
+Question
+“Is it broken?”
+“Why is it broken?”
+Data
+Metrics
+Metrics + Logs + Traces
+Tools
+Prometheus
+Prometheus + Grafana + Loki
+Depth
+Reactive
+Proactive
+
+
+🧩 Real-world Example (Very Important)
+Scenario:
+Users say “App is slow”
+Monitoring (Prometheus):
+CPU: ✅ OK
+Memory: ✅ OK
+App is UP: ✅
+➡️ Monitoring says: “Everything looks fine 🤷”
+Observability (Grafana + Logs + Traces):
+Slow API endpoint identified
+DB query taking 5 seconds
+Only happening for one service
+➡️ Observability says:
+“The /login API is slow because DB query is slow”
+
+🧠 One-line summary (Interview Gold ✨)
+Monitoring tells you that a problem exists.
+Observability tells you why the problem exists.
+If you want, next I can:
+Explain Prometheus architecture
+Show how Prometheus + Grafana work in Kubernetes
+Give real interview questions & answers
+Walk you through installing Prometheus + Grafana in EC2 / K8
+LOGS → Grafana Loki
+🧵 TRACES → Jaeger or Grafana Tempo
+Metrics  → Prometheus
+Logs     → Loki
+Traces   → Tempo / Jaeger
+UI       → Grafana
+
+  Prometheus → Metrics
+  Loki → Logs
+  Tempo → Traces
+  Grafana → Dashboard
+
+Alertmanager can send alerts to:
+📧 Email
+💬 Slack
+📞 PagerDuty
+🪝 Webhooks
+Opsgenie
+
+Scrape = Prometheus pulling (fetching) metrics from an application or server at regular intervals
+Prometheus is installed on a central monitoring server, while Node Exporter runs on each target server being monitored.
+cd /opt
+wget https://github.com/prometheus/prometheus/releases/download/v2.52.0/prometheus-2.52.0.linux-amd64.tar.gz
+tar -xvf prometheus-2.52.0.linux-amd64.tar.gz
+cd prometheus-2.52.0.linux-amd64
+./Prometheus
+http://<EC2-PUBLIC-IP>:9090
+./prometheus --config.file=prometheus.yml
+status
+In Prometheus dashboard – TSDB table series database 
+Seacrch cpu 
+Execute 
+Change in to gragh 
+A core is an independent processing unit inside a CPU that can run instructions in parallel.
+Think of it like this:
+🧠 CPU = the brain
+💪 Core = a worker inside the brain
+A CPU can have:
+1 core (old / tiny machines)
+4, 8, 16, 64+ cores (modern servers)
+Each core can do one unit of work at a time.
+
+What does “1 core” mean in Prometheus?
+When you see CPU usage expressed in cores, it means:
+How many full CPU cores are being used continuously
+Examples:
+0.1 → using 10% of one core
+0.5 → using half of a core
+1.0 → using one full core
+2.0 → using two full cores
+4.0 → using four full cores
+0.7 on 1 core → OK
+0.9 on 1 core → risky
+1.8 on 2 cores → overloaded
+2.5 on 4 cores → healthy
+⚠️ Real-time systems should never live at 90–100% CPU.
+WebSockets / live dashboards
+Streaming analytics
+Online gaming backends
+Trading dashboards (not execution engines)
+IoT data ingestion
+Chat systems
+👉 Typical CPU need:
+1–4 cores
+Missing deadlines makes results useless, but doesn’t crash the world.
+Examples:
+Video/audio processing pipelines
+Live ML inference
+Telecom signaling
+Industrial monitoring
+👉 Typical CPU need:
+2–8 cores
+Deadlines must never be missed.
+Examples:
+Robotics control loops
+Medical devices
+Avionics
+Automotive ECUs
+👉 Typical CPU need:
+Often dedicated cores
+RTOS or real-time Linux
+Core count depends on tasks, but isolation matters more than count
+cd /opt
+wget https://github.com/prometheus/node_exporter/releases/download/v1.10.2/node_exporter-1.10.2.linux-amd64.tar.gz
+tar xvf node_exporter-1.10.2.linux-amd64.tar.gz
+
+sudo mv node_exporter-1.8.0.linux-amd64 node_exporter
+cd /opt/node_exporter
+./node_exporter
+Listening on :9100
+http://EC2_PUBLIC_IP:9100/metrics
+Now connect Prometheus to Node Exporter
+cd /opt/prometheus
+nano prometheus.yml
+scrape_configs:
+  - job_name: "node_exporter"
+    static_configs:
+      - targets: ["localhost:9100"]
+Prometheus UI → Status → Targets → should show:
+node_exporter   UP
+
+ummary (important for interviews)
+Component
+Port
+Purpose
+Prometheus
+9090
+Collects & stores metrics
+Node Exporter
+9100
+Exposes Linux system metrics
+
+
+
