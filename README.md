@@ -100,6 +100,10 @@ groups:
 
 ### Alertmanager Setup
 
+```
+nano alertmanager/alertmanager.yml
+```
+
 
 ```
 global:
